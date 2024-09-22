@@ -15,9 +15,22 @@ public class LongChipCompetition {
 
     public static void main(String[] args) {
         LongChipCompetition lcc = new LongChipCompetition();
-
+        lcc.initializeBeatles();
+        
+        ArrayList <Integer> eachBeetlesLongTater = new ArrayList <Integer> ();
+        
     }
-
+    
+    public int findLongestChip (ArrayList <Integer> chips) {
+    	int largestChip = 0;
+    	for (int x = 0; x<chips.size(); x++) {
+    		if (chips.get(x)>largestChip) {
+    			largestChip = chips.get(x);
+    		}
+    	}
+    	return largestChip;
+    }
+    
     private void initializeBeatles() {
         Beatle george = new Beatle("George");
         Beatle john = new Beatle("John");
