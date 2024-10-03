@@ -11,7 +11,7 @@ public class LongChipCompetition {
      * Beatle classes. Make sure to initialize The Beatles before you start
      * your search.
      */
-    private ArrayList<Beatle> theBeatles = new ArrayList<Beatle>();
+    private static ArrayList<Beatle> theBeatles = new ArrayList<Beatle>();
 
     public static void main(String[] args) {
         LongChipCompetition lcc = new LongChipCompetition();
@@ -19,13 +19,33 @@ public class LongChipCompetition {
         
         ArrayList <Integer> eachBeetlesLongTater = new ArrayList <Integer> ();
         
+       System.out.println(findLongestBeatle(theBeatles).getName());
     }
     
-    public int findLongestChip (ArrayList <Integer> chips) {
-    	int largestChip = 0;
+    public static Beatle findLongestBeatle (ArrayList <Beatle> beatles) {
+    	
+    
+    	double longestChip = 0;
+    	int longestChipPosition = 0;
+    	
+    	 for (int x = 0; x < theBeatles.size(); x++) {
+         	if (findLongestChip(theBeatles.get(x).getChips()) > longestChip) {
+         		longestChip = findLongestChip(theBeatles.get(x).getChips());
+         		longestChipPosition = x;
+         	}
+         	
+         }
+    	 System.out.println(longestChip);
+    	 System.out.println(longestChipPosition);
+    	 System.out.println(theBeatles.get(longestChipPosition).getName());
+    	 
+    	 return theBeatles.get(longestChipPosition);
+    }
+    public static double findLongestChip (ArrayList <Chip> chips) {
+    	double largestChip = 0;
     	for (int x = 0; x<chips.size(); x++) {
-    		if (chips.get(x)>largestChip) {
-    			largestChip = chips.get(x);
+    		if (chips.get(x).getLength()>largestChip) {
+    			largestChip = chips.get(x).getLength();
     		}
     	}
     	return largestChip;

@@ -24,13 +24,13 @@ public class RetroSun extends PApplet {
     @Override
     public void settings() {
         // 1. Set the size of your sketch to at least 800 width, 600 height
-        
+        size(WIDTH, HEIGHT);
     }
 
     @Override
     public void setup() {
         // 2. Set bgColor as the background color
-        
+       
     }
 
     @Override
