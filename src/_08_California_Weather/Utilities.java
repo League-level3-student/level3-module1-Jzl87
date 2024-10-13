@@ -28,7 +28,7 @@ public class Utilities {
      * Use this method to get a HashMap of a California city and the
      * weather data
      */
-    public static HashMap<String, WeatherData> getWeatherData() {
+	public static HashMap<String, WeatherData> getWeatherData() {
         HashMap<String, WeatherData> weatherData = new HashMap<>();
         HashMap<String, Integer> duplicateLocations = new HashMap<>();
         

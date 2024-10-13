@@ -1,5 +1,7 @@
 package _05_Retro_Sun;
 
+import java.awt.Color;
+
 import processing.core.PApplet;
 
 /*
@@ -30,7 +32,7 @@ public class RetroSun extends PApplet {
     @Override
     public void setup() {
         // 2. Set bgColor as the background color
-       
+       background(bgColor);
     }
 
     @Override
@@ -45,6 +47,10 @@ public class RetroSun extends PApplet {
 
         // Do you see a yellow sun like in the 1st image?
         // If not, fix your code before proceeding.
+    	fill(sunColors[0]);
+    	noStroke();
+    	ellipse(WIDTH/2, HEIGHT/2, 400, 400);
+    	
 
         
         /*
@@ -56,14 +62,30 @@ public class RetroSun extends PApplet {
         // Call the loadPixels() method to put all the pixel colors into
         // the pixels[] array
         // https://processing.org/reference/loadPixels_.html
-
+    	loadPixels();
         // We want to change the color of our sun so use an if statement
         // to check if the pixel is the color of the yellow circle.
-
+    	
         // If pixel[i] is the same color as the color of our circle (sunColors[0]),
         // we need to map the pixel to a color in our sunColors[] array
         // (see 2nd gradient image in RetroSun.html)
+    
+    	int sunTopY = sunColors[0];
+    	int sunBottomY = sunColors[sunColors.length - 1];
+    	
+    	for (int x = 0; x < pixels.length; x++) {
+    		
+    			        
+    		if (pixels[x] == (sunColors[0])) {
+    			int y = x / width;
+    	        float step = map(y, sunTopY, sunBottomY, 0, 1);
+    	        int color = interpolateColor(sunColors, step);
 
+    	        pixels[x] = color;
+    		}
+    	}
+    	
+    	updatePixels();
         // The top of the sun is yellow (sunColors[0]) and the bottom
         // of the sun is red (sunColors[sunColors.length - 1]
 

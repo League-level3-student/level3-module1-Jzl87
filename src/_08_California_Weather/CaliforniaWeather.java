@@ -1,6 +1,15 @@
 package _08_California_Weather;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import _06_Intro_To_Hash_Maps._02_LogSearch;
 
 /*
  * OBJECTIVE:
@@ -27,19 +36,91 @@ import java.util.HashMap;
  * temperature, you can get a free API key at: https://openweathermap.org/api
  */
 
-public class CaliforniaWeather {
-    
-    void start() {
-        HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
-        
-        // All city keys have the first letter capitalized of each word
-        String cityName = Utilities.capitalizeWords( "National City" );
-        WeatherData datum = weatherData.get(cityName);
-        
-        if( datum == null ) {
-            System.out.println("Unable to find weather data for: " + cityName);
-        } else {
-            System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
-        }
-    }
+public class CaliforniaWeather implements ActionListener {
+
+	JFrame frame = new JFrame();
+	JPanel panel = new JPanel();
+
+	HashMap<Integer, String> log = new HashMap<Integer, String>();
+
+	JButton button1 = new JButton("Find city's weather");
+	JButton button2 = new JButton("Find weather condition");
+	JButton button3 = new JButton("Find temperature");
+
+	void start() {
+		HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
+
+		// All city keys have the first letter capitalized of each word
+		String cityName = Utilities.capitalizeWords("National City");
+		WeatherData datum = weatherData.get(cityName);
+
+		if (datum == null) {
+			System.out.println("Unable to find weather data for: " + cityName);
+		} else {
+			System.out.println(
+					cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
+		}
+
+		setup();
+	}
+
+	public void setup() {
+
+		frame.setVisible(true);
+		frame.add(panel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		panel.add(button1);
+		panel.add(button2);
+		panel.add(button3);
+
+		button1.addActionListener(this);
+		button2.addActionListener(this);
+		button3.addActionListener(this);
+
+		frame.pack();
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton buttonPressed = (JButton) e.getSource();
+
+		if (buttonPressed == button1) {
+
+			String city = JOptionPane.showInputDialog(null, "Enter city name");
+
+			if (city.equals()) {
+
+			}
+
+		} else if (buttonPressed == button2) {
+
+			String IDString = JOptionPane.showInputDialog(null, "Enter ID to find");
+			Integer ID = Integer.parseInt(IDString);
+
+			if (log.containsKey(ID)) {
+				JOptionPane.showMessageDialog(null, log.get(ID));
+			} else {
+				JOptionPane.showMessageDialog(null, "that doesnt exist. loser.");
+
+			}
+		} else if (buttonPressed == button3) {
+
+			String result = "";
+			for (Integer i : log.keySet()) {
+				result += "ID: " + i + " Name: " + log.get(i) + "\n";
+			}
+
+			JOptionPane.showMessageDialog(null, result);
+
+		} else {
+
+			String IDString = JOptionPane.showInputDialog(null, "Enter ID to find");
+			Integer ID = Integer.parseInt(IDString);
+
+			log.remove(ID);
+		}
+
+	}
 }
