@@ -3,10 +3,13 @@ package _09_World_Clocks;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.Timer;
@@ -35,58 +38,110 @@ import javax.swing.Timer;
  */
 
 public class WorldClocks implements ActionListener {
-    ClockUtilities clockUtil;
-    Timer timer;
-    TimeZone timeZone;
+	ClockUtilities clockUtil;
+	Timer timer;
+	TimeZone timeZone;
 
-    JFrame frame;
-    JPanel panel;
-    JTextArea textArea;
-    
-    String city;
-    String dateStr;
-    String timeStr;
-    
-    public WorldClocks() {
-        clockUtil = new ClockUtilities();
+	JFrame frame;
+	JPanel panel;
+	JButton button;
+	HashMap<Integer, JTextArea> textArea = new HashMap<Integer, JTextArea>();
 
-        // The format for the city must be: city, country (all caps)
-        city = "Chicago, US";
-        timeZone = clockUtil.getTimeZoneFromCityName(city);
-        
-        Calendar calendar = Calendar.getInstance(timeZone);
-        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-        String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        dateStr = dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
-        
-        System.out.println(dateStr);
+	
+	public static int currentKey = 0;
 
-        // Sample starter program
-        frame = new JFrame();
-        panel = new JPanel();
-        textArea = new JTextArea();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.setSize(100, 100);
-        frame.add(panel);
-        panel.add(textArea);
-        textArea.setText(city + "\n" + dateStr);
-        
-        // This Timer object is set to call the actionPerformed() method every
-        // 1000 milliseconds
-        timer = new Timer(1000, this);
-        timer.start();
-    }
+	HashMap<Integer, String> city = new HashMap<Integer, String>();
+	HashMap<Integer, String> dateStr = new HashMap<Integer, String>();
+	HashMap<Integer, String> timeStr = new HashMap<Integer, String>();
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        Calendar c = Calendar.getInstance(timeZone);
-        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
-        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
-        timeStr = militaryTime + twelveHourTime;
-        
-        System.out.println(timeStr);
-        textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
-        frame.pack();
-    }
+	public WorldClocks() {
+		clockUtil = new ClockUtilities();
+
+		// Sample starter program
+
+		city.put(currentKey, "Chicago, US");
+		timeZone = clockUtil.getTimeZoneFromCityName(city.get(currentKey));
+
+		Calendar calendar = Calendar.getInstance(timeZone);
+		String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+		String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+		dateStr.put(currentKey, dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " "
+				+ calendar.get(Calendar.YEAR));
+
+		frame = new JFrame();
+		panel = new JPanel();
+		textArea.put(currentKey, new JTextArea());
+		button = new JButton("Add time");
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setSize(100, 100);
+		frame.add(panel);
+
+		panel.add(button);
+		panel.add(textArea.get(currentKey));
+		button.addActionListener(this);
+
+		textArea.get(currentKey).setText(city.get(currentKey) + "\n" + dateStr.get(currentKey));
+		// This Timer object is set to call the actionPerformed() method every
+		// 1000 milliseconds
+		timer = new Timer(1000, this);
+		timer.start();
+		
+		System.out.println("-----------------------------------------------------------");
+		System.out.println(city.get(currentKey));
+		System.out.println(dateStr.get(currentKey));
+		System.out.println("-----------------------------------------------------------");
+		
+		currentKey ++;
+	}
+
+	public void addTime(String place) {
+		// The format for the city must be: city, country (all caps)
+		textArea.put(currentKey, new JTextArea());
+
+		panel.add(textArea.get(currentKey));
+
+		city.put(currentKey, place);
+		timeZone = clockUtil.getTimeZoneFromCityName(city.get(currentKey));
+
+		Calendar calendar = Calendar.getInstance(timeZone);
+		String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+		String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+		dateStr.put(currentKey, dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " "
+				+ calendar.get(Calendar.YEAR));
+
+		Timer newTimer = new Timer(1000, this);
+		newTimer.start();
+
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Calendar c = Calendar.getInstance(timeZone);
+		String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
+		String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":"
+				+ c.get(Calendar.SECOND) + "]";
+		timeStr.put(currentKey, militaryTime + twelveHourTime);
+
+		System.out.println(timeStr.get(currentKey));
+		
+		System.out.println("-----------------------------------------------------------");
+		System.out.println(city.get(currentKey));
+		System.out.println(dateStr.get(currentKey));
+		System.out.println(timeStr.get(currentKey));
+		
+		textArea.get(currentKey).setText(city.get(currentKey) + "\n" + dateStr.get(currentKey) + "\n" + timeStr.get(currentKey));
+		frame.pack();
+
+		if (arg0.getSource() instanceof JButton) {
+			JButton buttonPressed = (JButton) arg0.getSource();
+
+			if (buttonPressed.equals(button)) {
+				String place = JOptionPane.showInputDialog("What time would you like to add the world clock?");
+				addTime(place);
+			}
+		}
+	}
 }

@@ -84,42 +84,51 @@ public class CaliforniaWeather implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		JButton buttonPressed = (JButton) e.getSource();
+		HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
 
 		if (buttonPressed == button1) {
+			String localation = JOptionPane.showInputDialog("What place would you like to preview?");
+			String holder = "";
+			for (String place : weatherData.keySet()) {
 
-			String city = JOptionPane.showInputDialog(null, "Enter city name");
-
-			if (city.equals()) {
-
+				if (place.equals(localation)) {
+					holder += weatherData.get(place).weatherSummary;
+				}
+			
 			}
-
+			
+			JOptionPane.showMessageDialog(null, holder);
+			
 		} else if (buttonPressed == button2) {
+			String weatherCondition = JOptionPane.showInputDialog("What weather would you like to preview?");
+			String holder = "";
+			for (String place : weatherData.keySet()) {
 
-			String IDString = JOptionPane.showInputDialog(null, "Enter ID to find");
-			Integer ID = Integer.parseInt(IDString);
-
-			if (log.containsKey(ID)) {
-				JOptionPane.showMessageDialog(null, log.get(ID));
-			} else {
-				JOptionPane.showMessageDialog(null, "that doesnt exist. loser.");
-
+				if (weatherData.get(place).weatherSummary.equals(weatherCondition)) {
+					holder += place + ", ";
+				}
+			
 			}
-		} else if (buttonPressed == button3) {
-
-			String result = "";
-			for (Integer i : log.keySet()) {
-				result += "ID: " + i + " Name: " + log.get(i) + "\n";
-			}
-
-			JOptionPane.showMessageDialog(null, result);
-
+			JOptionPane.showMessageDialog(null, "At " + holder + "the weather is" + weatherCondition);
 		} else {
+			String maxTempString = JOptionPane.showInputDialog("Whats the max");
+			String minTempString = JOptionPane.showInputDialog("whats the min");
+			
+			double maxTemp = Double.parseDouble(maxTempString);
+			double minTemp = Double.parseDouble(minTempString);
+			
+			String holder = "";
+			
+			for (String place : weatherData.keySet()) {
 
-			String IDString = JOptionPane.showInputDialog(null, "Enter ID to find");
-			Integer ID = Integer.parseInt(IDString);
-
-			log.remove(ID);
+				if (weatherData.get(place).temperatureF <= maxTemp && weatherData.get(place).temperatureF >= minTemp ) {
+					holder += place + ", ";
+				}
+			
+			}
+			JOptionPane.showMessageDialog(null, "At " + holder + "the weather temperature is between " + minTemp + " and " + maxTemp);
 		}
 
 	}
